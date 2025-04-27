@@ -1,0 +1,9 @@
+<h1>Calendar Events</h1>
+<ul>
+{% for calendar_event in object_list %}
+    <li><a href="{% url 'mooncalendar:calendarevent-detail' calendar_event.pk %}">{{ calendar_event.title }}</a></li>
+{% empty %}
+    <li>No calendar events yet.</li>
+{% endfor %}
+</ul>
+<a href="{% url 'mooncalendar:calendarevent-create' %}">Create an event</a>
