@@ -3,17 +3,11 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 
 from django.views import generic
-from django.utils import timezone
 
 from .models import CalendarEvent
 
-class IndexView(generic.ListView):
-    template_name = "mooncalendar/index.html"
-    context_object_name = "latest_calendar_event_list"
-
-    def get_queryset(self):
-        """Return the last five published calendar events."""
-        return CalendarEvent.objects.order_by("-id")[:5]
+def index(request):
+    return render(request, "mooncalendar/index.html")
     
 class CalendarEventListView(generic.ListView):
     model = CalendarEvent
@@ -21,6 +15,9 @@ class CalendarEventListView(generic.ListView):
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs)
+
+    def get_queryset(self):
+        return super().get_queryset().order_by('-id')
 
 class CalendarEventCreateView(generic.CreateView):
     model = CalendarEvent

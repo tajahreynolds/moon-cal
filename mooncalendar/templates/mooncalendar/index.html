@@ -1,7 +1,3 @@
-{% if latest_calendar_event_list %}
-    <p>Welcome to Moon Calendars!</p>
-    <p><a href="events/">View some of the latest events</a></p>
-{% else %}
-    <p>No events are available.</p>
-{% endif %}
+<p>Welcome to Moon Calendars!</p>
+<p><a href="events/">View some of the latest events</a></p>
 <p><a href="{% url 'mooncalendar:calendarevent-create' %}">Create an event</a></p>
