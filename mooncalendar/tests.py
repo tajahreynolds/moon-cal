@@ -32,6 +32,7 @@ class CalendarEventListViewTests(TestCase):
         """ Calendar events have an associated details page. """
         calendar_event = create_calendarevent(title="Test Calendar Event Details")
         response = self.client.get(reverse("mooncalendar:calendarevent-detail", kwargs={"pk": calendar_event.pk}))
+        self.assertContains(response, calendar_event.title)
         self.assertEqual(response.context["object"], calendar_event)
 
     def test_two_calendarevents(self):
