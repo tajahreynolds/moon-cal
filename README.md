@@ -17,7 +17,17 @@ A Django-based web application for tracking and managing calendar events with lu
    cd moon-cal
    ```
 
-2. **Environment Configuration**
+2. **Python Environment Setup**
+- *(Optional)* Create and activate a Python virtual environment (to install required dependencies locally):
+  ```bash
+  python -m venv venv
+  source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+  ```
+   ```bash
+   python -m pip install -r requirements.txt
+   ```
+
+3. **Environment Configuration**
    - Copy the `.env.example` file to `.env`:
      ```bash
      cp .env.example .env
@@ -27,7 +37,7 @@ A Django-based web application for tracking and managing calendar events with lu
      - `PG_PASSWORD`: PostgreSQL password
      - `PG_DATABASE`: Database name
 
-3. **Database Setup**
+4. **Database Setup**
    
    Choose one of the following options:
 
@@ -43,15 +53,11 @@ A Django-based web application for tracking and managing calendar events with lu
    - Create a database and user with appropriate permissions
    - Update the `.env` file with your database credentials
 
-4. **Database Migration**
+5. **Database Migration**
    ```bash
    python manage.py migrate
    ```
 
-5. **Python Environment Setup**
-   ```bash
-   python -m pip install -r requirements.txt
-   ```
 6. **Start the Development Server**
    ```bash
    python manage.py runserver
