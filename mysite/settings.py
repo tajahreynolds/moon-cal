@@ -96,21 +96,24 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        # Use Django's standard top-level connection keys. Previously the
-        # database was pinned via OPTIONS["dbname"], which psycopg honours over
-        # NAME — that meant the test runner's "test_<db>" rename was ignored and
-        # tests ran against the real database. Top-level NAME lets the test
-        # runner create and use a separate test database.
-        'NAME': os.getenv("PG_DATABASE", "mooncalendar"),
-        'HOST': os.getenv("PG_HOST"),
-        'PORT': os.getenv("PG_PORT"),
-        'USER': os.getenv("PG_USERNAME"),
-        'PASSWORD': os.getenv("PG_PASSWORD"),
+if os.getenv("PG_DATABASE"):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv("PG_DATABASE"),
+            'HOST': os.getenv("PG_HOST"),
+            'PORT': os.getenv("PG_PORT"),
+            'USER': os.getenv("PG_USERNAME"),
+            'PASSWORD': os.getenv("PG_PASSWORD"),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
