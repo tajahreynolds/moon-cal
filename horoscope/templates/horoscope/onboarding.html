@@ -1,0 +1,60 @@
+{% extends "horoscope/base.html" %}
+{% load static %}
+{% block title %}Set up · Daily Signal{% endblock %}
+
+{% block content %}
+<header class="screen-header">
+  <h1>Daily Signal</h1>
+  <p class="subtle">Your birth data stays on this device's session. No account.</p>
+</header>
+
+<form method="post" class="card onboarding" id="onboarding-form"
+      data-cities-url="{% url 'horoscope:api-cities' %}">
+  {% csrf_token %}
+  {% if form.non_field_errors %}
+  <div class="form-error">{{ form.non_field_errors }}</div>
+  {% endif %}
+
+  <label class="field">
+    <span>Birth date</span>
+    {{ form.birth_date }}
+  </label>
+
+  <label class="field">
+    <span>Birth time</span>
+    {{ form.birth_time }}
+    <small>{{ form.birth_time.help_text }}</small>
+  </label>
+
+  <div class="field">
+    <span>Birth city</span>
+    {{ form.city }}
+    <ul class="autocomplete" id="city-results" hidden></ul>
+    {{ form.latitude }}{{ form.longitude }}{{ form.timezone }}
+  </div>
+
+  <details class="manual">
+    <summary>City not listed? Enter coordinates</summary>
+    <label class="field"><span>Latitude</span>
+      <input type="number" step="any" id="manual-lat" placeholder="40.7128"></label>
+    <label class="field"><span>Longitude</span>
+      <input type="number" step="any" id="manual-lon" placeholder="-74.0060"></label>
+    <label class="field"><span>Timezone (IANA)</span>
+      <input type="text" id="manual-tz" placeholder="America/New_York"></label>
+    <button type="button" class="btn-secondary" id="apply-manual">Use these</button>
+  </details>
+
+  <label class="field">
+    <span>House system</span>
+    {{ form.house_system }}
+  </label>
+
+  <button type="submit" class="btn-primary">See my signal</button>
+</form>
+{% endblock %}
+
+{% block tabbar %}{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'horoscope/js/autocomplete.js' %}" defer></script>
+{% endblock %}

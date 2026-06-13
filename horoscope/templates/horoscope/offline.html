@@ -1,0 +1,13 @@
+{% extends "horoscope/base.html" %}
+{% block title %}Offline · Daily Signal{% endblock %}
+
+{% block content %}
+<header class="screen-header">
+  <h1>Offline</h1>
+  <p class="subtle">You're not connected. Your last reading is cached on the
+     Today screen; fresh transits need a connection.</p>
+</header>
+<p class="hint"><a href="{% url 'horoscope:dashboard' %}">← Back to today</a></p>
+{% endblock %}
+
+{% block tabbar %}{% endblock %}

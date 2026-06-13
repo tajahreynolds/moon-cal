@@ -1,0 +1,46 @@
+{% extends "horoscope/base.html" %}
+{% block title %}Blueprint · Daily Signal{% endblock %}
+{% block tab_blueprint %}is-active{% endblock %}
+
+{% block content %}
+<header class="screen-header">
+  <h1>Blueprint</h1>
+  <p class="subtle">{{ profile.birth_city }} · {{ profile.birth_date|date:"M j, Y" }}</p>
+</header>
+
+<section class="card mask">
+  <div class="mask-item">
+    <div class="mask-label">Ascendant</div>
+    <div class="mask-value">{{ ascendant.sign }}</div>
+    <div class="mask-deg">{{ ascendant.deg_in_sign|floatformat:0 }}°</div>
+  </div>
+  <div class="mask-divider"></div>
+  <div class="mask-item">
+    <div class="mask-label">Sun</div>
+    <div class="mask-value">{{ sun.sign }}</div>
+    <div class="mask-deg">{{ sun.deg_in_sign|floatformat:0 }}°</div>
+  </div>
+</section>
+
+<section class="card grid-card">
+  <table class="placements">
+    <thead>
+      <tr><th>Planet</th><th>Sign</th><th>House</th></tr>
+    </thead>
+    <tbody>
+      {% for row in rows %}
+      <tr>
+        <td class="p-name">{{ row.name }}{% if row.retrograde %} <span class="retro" title="Retrograde">℞</span>{% endif %}</td>
+        <td>{{ row.sign }} <span class="subtle">{{ row.deg }}°</span></td>
+        <td><span class="house-num">{{ row.house }}</span> <span class="subtle">{{ row.house_label }}</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<p class="hint">
+  Chart ruler: <strong>{{ chart_ruler }}</strong>.
+  <a href="{% url 'horoscope:methodology' %}">How is this computed?</a>
+</p>
+{% endblock %}

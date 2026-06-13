@@ -41,6 +41,7 @@ INTERNAL_IPS = [
 
 INSTALLED_APPS = [
     'mooncalendar.apps.MooncalendarConfig',
+    'horoscope.apps.HoroscopeConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -98,14 +99,16 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mooncalendar',
-        'OPTIONS': {
-            "host": os.getenv("PG_HOST"),
-            "port": os.getenv("PG_PORT"),
-            "dbname": os.getenv("PG_DATABASE"),
-            "user": os.getenv("PG_USERNAME"),
-            "password": os.getenv("PG_PASSWORD"),
-        },
+        # Use Django's standard top-level connection keys. Previously the
+        # database was pinned via OPTIONS["dbname"], which psycopg honours over
+        # NAME — that meant the test runner's "test_<db>" rename was ignored and
+        # tests ran against the real database. Top-level NAME lets the test
+        # runner create and use a separate test database.
+        'NAME': os.getenv("PG_DATABASE", "mooncalendar"),
+        'HOST': os.getenv("PG_HOST"),
+        'PORT': os.getenv("PG_PORT"),
+        'USER': os.getenv("PG_USERNAME"),
+        'PASSWORD': os.getenv("PG_PASSWORD"),
     }
 }
 
@@ -150,3 +153,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Horoscope app configuration
+# Pluggable text engine for daily directives (rule-based now; Claude later).
+HOROSCOPE_TEXT_ENGINE = "horoscope.services.textengine.RuleBasedEngine"
+
+# Profiles are keyed by the session cookie (no login), so keep sessions long-lived.
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 365  # 1 year
