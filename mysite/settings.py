@@ -62,7 +62,13 @@ MIDDLEWARE = [
 
 TESTING = "test" in sys.argv
 
-if not TESTING:
+try:
+    import debug_toolbar as _dt  # noqa: F401
+    _debug_toolbar_available = True
+except ImportError:
+    _debug_toolbar_available = False
+
+if not TESTING and _debug_toolbar_available:
     INSTALLED_APPS = [
         *INSTALLED_APPS,
         "debug_toolbar",
