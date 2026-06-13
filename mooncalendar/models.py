@@ -7,7 +7,7 @@ class CalendarEvent(models.Model):
 
     class Meta:
         constraints = [
-            CheckConstraint(check=~Q(title=""), name="calendar_event_title_not_empty")
+            CheckConstraint(condition=~Q(title=""), name="calendar_event_title_not_empty")
         ]
 
     def __str__(self):
