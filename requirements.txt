@@ -3,3 +3,4 @@ psycopg[binary]
 python-dotenv
 django-debug-toolbar
 pyswisseph==2.10.3.2
+tzdata  # IANA tz database for zoneinfo on systems without one (Windows, Termux, slim containers)
