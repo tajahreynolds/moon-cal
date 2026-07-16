@@ -12,6 +12,6 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddConstraint(
             model_name='calendarevent',
-            constraint=models.CheckConstraint(check=models.Q(('title', ''), _negated=True), name='calendar_event_title_not_empty'),
+            constraint=models.CheckConstraint(condition=models.Q(('title', ''), _negated=True), name='calendar_event_title_not_empty'),
         ),
     ]

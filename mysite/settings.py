@@ -41,6 +41,7 @@ INTERNAL_IPS = [
 
 INSTALLED_APPS = [
     'mooncalendar.apps.MooncalendarConfig',
+    'horoscope.apps.HoroscopeConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -61,7 +62,13 @@ MIDDLEWARE = [
 
 TESTING = "test" in sys.argv
 
-if not TESTING:
+try:
+    import debug_toolbar as _dt  # noqa: F401
+    _debug_toolbar_available = True
+except ImportError:
+    _debug_toolbar_available = False
+
+if not TESTING and _debug_toolbar_available:
     INSTALLED_APPS = [
         *INSTALLED_APPS,
         "debug_toolbar",
@@ -95,19 +102,24 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mooncalendar',
-        'OPTIONS': {
-            "host": os.getenv("PG_HOST"),
-            "port": os.getenv("PG_PORT"),
-            "dbname": os.getenv("PG_DATABASE"),
-            "user": os.getenv("PG_USERNAME"),
-            "password": os.getenv("PG_PASSWORD"),
-        },
+if os.getenv("PG_DATABASE"):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv("PG_DATABASE"),
+            'HOST': os.getenv("PG_HOST"),
+            'PORT': os.getenv("PG_PORT"),
+            'USER': os.getenv("PG_USERNAME"),
+            'PASSWORD': os.getenv("PG_PASSWORD"),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -150,3 +162,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Horoscope app configuration
+# Pluggable text engine for daily directives (rule-based now; Claude later).
+HOROSCOPE_TEXT_ENGINE = "horoscope.services.textengine.RuleBasedEngine"
+
+# Profiles are keyed by the session cookie (no login), so keep sessions long-lived.
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 365  # 1 year

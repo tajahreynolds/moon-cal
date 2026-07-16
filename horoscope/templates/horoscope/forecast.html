@@ -1,0 +1,44 @@
+{% extends "horoscope/base.html" %}
+{% block title %}Forecast · Daily Signal{% endblock %}
+{% block tab_forecast %}is-active{% endblock %}
+
+{% block content %}
+<header class="screen-header">
+  <h1>7-Day Flow</h1>
+  <p class="subtle">Friction vs. Flow. Peaks = high alignment, valleys = rest.</p>
+</header>
+
+<section class="card trend">
+  <svg viewBox="0 0 {{ svg.width }} {{ svg.height }}" class="trend-svg"
+       preserveAspectRatio="none" role="img" aria-label="7-day flow trend">
+    <line x1="0" y1="{{ svg.baseline|floatformat:0 }}" x2="{{ svg.width }}"
+          y2="{{ svg.baseline|floatformat:0 }}" class="trend-axis"/>
+    <path d="{{ svg.path }}" class="trend-line" fill="none"/>
+    {% for p in svg.points %}
+    <circle cx="{{ p.x }}" cy="{{ p.y }}" r="4" class="trend-dot c-{{ p.band }}"
+            data-date="{{ p.date }}" tabindex="0"
+            role="button" aria-label="{{ p.weekday }}: flow {{ p.flow }}"/>
+    {% endfor %}
+  </svg>
+  <div class="trend-axis-labels">
+    {% for p in svg.points %}<span>{{ p.weekday }}</span>{% endfor %}
+  </div>
+</section>
+
+<p class="hint">Tap any day for the raw transit math.</p>
+
+<!-- Data drawer (bottom sheet) -->
+<div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
+<aside class="drawer" id="drawer" hidden aria-modal="true" role="dialog"
+       data-url-base="/api/day/">
+  <div class="drawer-handle"></div>
+  <div class="drawer-content" id="drawer-content">
+    <div class="drawer-loading">Loading…</div>
+  </div>
+</aside>
+{% endblock %}
+
+{% block scripts %}
+{% load static %}
+<script src="{% static 'horoscope/js/drawer.js' %}" defer></script>
+{% endblock %}

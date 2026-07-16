@@ -19,13 +19,18 @@ from django.urls import path, include
 from django.conf import settings
 
 urlpatterns = [
+    path('', include("horoscope.urls")),
     path('mooncal/', include("mooncalendar.urls")),
     path('admin/', admin.site.urls),
 ]
 
 if settings.DEBUG:
-    import debug_toolbar
-    urlpatterns = [
-        path('__debug__/', include(debug_toolbar.urls)),
-        *urlpatterns,
-    ]
+    try:
+        import debug_toolbar
+    except ImportError:
+        debug_toolbar = None
+    if debug_toolbar is not None:
+        urlpatterns = [
+            path('__debug__/', include(debug_toolbar.urls)),
+            *urlpatterns,
+        ]

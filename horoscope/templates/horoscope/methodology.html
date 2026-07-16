@@ -1,0 +1,44 @@
+{% extends "horoscope/base.html" %}
+{% block title %}Methodology · Daily Signal{% endblock %}
+
+{% block content %}
+<header class="screen-header">
+  <h1>Methodology</h1>
+  <p class="subtle">No mysticism in the math. Here's exactly what we compute.</p>
+</header>
+
+<section class="card method">
+  <h2 class="fact-heading">FACT — computed astronomy</h2>
+  <ul>
+    <li><strong>Ephemeris:</strong> Swiss Ephemeris (Moshier model), sub-arcsecond
+        planetary longitudes, computed locally — no third-party API.</li>
+    <li><strong>Zodiac:</strong> Tropical (sign = season-anchored ecliptic longitude).</li>
+    <li><strong>Houses:</strong> Whole-sign by default (each house is one whole
+        sign from your rising sign); Placidus optional.</li>
+    <li><strong>Retrograde (℞):</strong> shown when a planet's apparent
+        longitudinal speed is negative — the literal definition, not a guess.</li>
+    <li><strong>Aspects:</strong> angular separations within standard orbs
+        (conjunction 8°, opposition 8°, square 7°, trine 7°, sextile 5°), each
+        labelled <em>applying</em> or <em>separating</em> from relative motion,
+        with an estimated time to exact.</li>
+  </ul>
+</section>
+
+<section class="card method">
+  <h2 class="read-heading">OUR READ — interpretation</h2>
+  <ul>
+    <li><strong>Energy / Focus / Friction</strong> and the <strong>flow score</strong>
+        are heuristics we layer on top of the facts above. They are opinions,
+        weighted from which houses each planet is transiting.</li>
+    <li><strong>Chart ruler</strong> uses traditional (domicile) rulerships.</li>
+    <li>House one-word labels:
+      {% for n, label in house_labels.items %}{{ n }}&nbsp;{{ label }}{% if not forloop.last %} · {% endif %}{% endfor %}.</li>
+  </ul>
+  <p class="subtle">Where you see <span class="fact-tag-inline">OUR READ</span> in the
+     app, that's interpretation. Everything else is the sky as computed.</p>
+</section>
+
+<p class="hint"><a href="{% url 'horoscope:dashboard' %}">← Back to today</a></p>
+{% endblock %}
+
+{% block tabbar %}{{ block.super }}{% endblock %}

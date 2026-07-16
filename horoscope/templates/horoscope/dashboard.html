@@ -1,0 +1,52 @@
+{% extends "horoscope/base.html" %}
+{% block title %}Today · Daily Signal{% endblock %}
+{% block tab_today %}is-active{% endblock %}
+
+{% block content %}
+<header class="dash-header">
+  <div class="dash-date">{{ today|date:"l, M j" }}</div>
+  <div class="status-bars" aria-label="Energy, Focus, Friction status">
+    {% for metric in scores.values %}
+    <div class="status-col">
+      <div class="bars bars-{{ metric.bars }} c-{{ metric.color }}">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="status-labels">
+    <span>Energy</span><span>Focus</span><span>Friction</span>
+  </div>
+</header>
+
+<section class="card directives">
+  <div class="fact-tag">OUR READ · <a href="{% url 'horoscope:methodology' %}">how?</a></div>
+  {% for d in directives %}
+  <div class="directive c-{% if d.metric == 'energy' %}{{ scores.energy.color }}{% elif d.metric == 'focus' %}{{ scores.focus.color }}{% else %}{{ scores.friction.color }}{% endif %}">
+    <div class="directive-icon" data-icon="{{ d.icon }}" aria-hidden="true">
+      {% if d.icon == 'battery' %}🔋{% elif d.icon == 'brain' %}🧠{% else %}🛡️{% endif %}
+    </div>
+    <div class="directive-body">
+      <div class="directive-label">{{ d.label }}</div>
+      <div class="directive-sentence">{{ d.sentence }}</div>
+      <div class="directive-imperative">{{ d.imperative }}</div>
+    </div>
+  </div>
+  {% endfor %}
+</section>
+
+{% if next_shift %}
+<footer class="ticker" id="ticker"
+        data-at-utc="{{ next_shift.at_utc }}"
+        data-label="{{ next_shift.label }}"
+        data-url="{% url 'horoscope:api-ticker' %}">
+  <span class="ticker-label">{{ next_shift.label }}</span>
+  <span class="ticker-count" id="ticker-count">in …</span>
+</footer>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+{% load static %}
+<script src="{% static 'horoscope/js/ticker.js' %}" defer></script>
+{% endblock %}
